@@ -12,13 +12,12 @@ This project holds both the client application and the server application there 
     - #### `pages` - Holds pages
     - #### `_app.tsx` - This is what renders all of our browser routes and different views (base component)
  - #### `index.html` - Base HTML file
-    - #### `package.json` - Defines npm behaviors and packages for the client
-- #### `package.json` - Defines npm behaviors and packages for the client
-   #### `DB` - Holds the server application
-    - #### `index.js` - This holds our configuration files, like mongoose uri
+#### `package.json` - Defines npm behaviors and packages for the client
+- #### `DB` - Holds the server application
+    - #### `index.js` - This holds the configuration file for mongoose connectivity
     - #### `controllers` - These hold all of the callback functions that each route will call
     - #### `models` - This holds all of our data models
     - #### `routes` - This holds all of our HTTP to URL path associations for each unique url
-- #### `server.js` - Defines npm behaviors and packages for the client
- #### `.gitignore` - Tells git which files to ignore
- #### `README` - This file!
+#### `server.js` - Defines npm behaviors and packages for the client
+#### `.gitignore` - Tells git which files to ignore
+#### `README` - This file!
