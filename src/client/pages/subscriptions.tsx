@@ -101,6 +101,7 @@ class Subscriptions extends React.PureComponent<Props> {
         sRight={ this.props.screenwidth >= 768 ? "40" : this.props.screenwidth <= 375 ? "12" : "20" }
         sTop="40" 
         sBottom="40"
+        fullHeight
         alignItems="center"
       >
         { this.props.userData && (

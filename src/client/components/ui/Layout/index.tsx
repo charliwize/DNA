@@ -31,6 +31,7 @@ const Layout = styled("div")<Props>`
   border: ${props => props.border ? `${props.borderWidth}px solid ${props.borderColor}` : "initial"}
   border-left: ${props => props.borderLeft ? `${props.borderWidth}px solid ${props.borderColor}` : "initial"}
   display: ${props => props.noFlex ? "" : "flex"};
+  height: ${props => props.height ? `${props.height}px` : props.fullHeight ? "100%" : "auto"};
   align-self: ${props => props.align};
   flex-basis: ${props => props.width ? `${props.width}px` : "auto"};
   padding-left: ${props => props.sLeft ? props.sLeft : 0}px;
