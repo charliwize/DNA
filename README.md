@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-This project holds both the client application and the server application there will one node modules folder handling but cases. First run `npm install` from the root. After this you will run `npm run start` from the root which will launch the project at https://localhost/3001. From now on run this command anytime you want to install all modules again. This is a script I have defined in package.json .
+This project holds both the client application and the server application there will one node modules folder handling but cases. First run `npm install` from the root. After this you will run `npm run start` from the root which will launch the project at https://localhost:/3001. From now on run this command anytime you want to install all modules again. This is a script I have defined in package.json .
 
 ## File structure
 #### `src` - Holds the client application and server connectivity
