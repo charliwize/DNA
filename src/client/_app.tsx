@@ -60,16 +60,24 @@ const App = (props) => {
       setLoggedIn(true)
       getData()
     }
+    // clean subscription after this effecr
     return () => {
       abortController.abort();
     };
-  }, [])
+  }, []);
+
   usePrevious(data);
 
-
+  // listen for window resizing and set screen width accordingling
   useEffect(() => {
+    if (!data && loggedIn) {
+      getData()
+    }
     window.addEventListener("resize", setSreensize);
-    return () => window.removeEventListener("resize", setSreensize)
+    return () => {
+      window.removeEventListener("resize", setSreensize);
+      new AbortController().abort();
+    };
   })
 
   const setSreensize = () => {
@@ -77,6 +85,8 @@ const App = (props) => {
   }
 
   function usePrevious(value) {
+    const abortController = new AbortController();
+
     const ref = useRef();
     // Store current data in ref
     useEffect(() => {
@@ -84,19 +94,25 @@ const App = (props) => {
       if(!ref.current) {
         getData()
       }
-    }, [value]); // only runs ehen value changes
-    
+
+      return () => {
+        abortController.abort();
+      };
+
+    }, [value]); // only runs when value changes
     // Return previous value (happens before update in useEffect above)
     return ref.current;
   }
 
-  function setSubscriptionInfo(id: string) {
+  // TODO show handle details page scription ID
+  // function setSubscriptionInfo(id: string) {
     
-  }
+  // }
 
   function changeRoute(status?: boolean) { 
     if (!status) {
       document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       setLoggedIn(false) 
     }
 
@@ -105,7 +121,8 @@ const App = (props) => {
     }
   }
 
-  async function getData() { 
+  // get user data after login for data to be persistent
+  async function getData() {
     await axios.get(`http://localhost:3001/api/users/getUsers/`, { 
       params: {
         username: username
@@ -117,7 +134,9 @@ const App = (props) => {
         const data = res.data
         setData(data)
       }
-    })
+    }).catch((err => {
+      return 
+    }))
   }
 
   return (
@@ -135,7 +154,7 @@ const App = (props) => {
                 <Subscriptions 
                   theme={theme} 
                   userData={data} 
-                  setSubscriptionId = {setSubscriptionInfo} screenwidth={width} />
+                  screenwidth={width} />
               </Fragment>
               :
               <Redirect to={{

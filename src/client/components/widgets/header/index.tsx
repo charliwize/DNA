@@ -47,7 +47,7 @@ const Header = (props: Props) => {
 				<Layout align="flex-start">
 					<Layout sTop="18">
 						<Layout noFlex>
-							<Text size="xx-large" color={props.theme.whiteColor} weight="600">
+							<Text size={ props.screenwidth >= 768 ? "xx-large" : "x-large" }color={props.theme.whiteColor} weight="600">
 								My Subscriptions
 							</Text>
 						</Layout>

@@ -39,8 +39,6 @@ class Login extends React.PureComponent<Props, State> {
 	}
 
 	private loginUser = async () => {
-		let data: UserData = undefined;
-
 		await axios.get(`http://localhost:3001/api/users/getUsers/`,
 			{ 
 				params: {
@@ -52,7 +50,6 @@ class Login extends React.PureComponent<Props, State> {
 		.then(res => {		
 			// if user exist set user into in cookie
 			if (res.status === 200) {
-				data = res.data;
 				document.cookie = `loggedIn=${true}; path=localhost:3001/; expires=Tue, 19 Jan 2038 03:14:07 GMT`;
 				document.cookie = `username=${this.state.username}; path=localhost:3001/; expires=Tue, 19 Jan 2038 03:14:07 GMT`
 				this.props.changeRoute(true);
@@ -91,8 +88,8 @@ class Login extends React.PureComponent<Props, State> {
 
 	render() {
 		return (
-			<Layout fullHeight justify="center" alignItems="center">
-				<Layout width="300" alignContent="center">
+			<Layout justify="center" alignItems="stretch" direction="row" sTop="36">
+				<Layout alignContent="center"  width="300">
 					<Layout height="24">
 						{ this.state.error && 
 							<Text color={this.props.theme.warning}>

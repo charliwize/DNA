@@ -35,7 +35,6 @@ getUserById = async (req, res) => {
 			}
 
 			if(!user) {
-				console.log("not user")
 				return res
 					.status(404)
 					.json({ success: false, error: `User not found` })

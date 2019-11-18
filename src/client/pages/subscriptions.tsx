@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { Button, Layout, Text, Background, UILink } from "../../client/components/ui";
+import { Layout, Text, Background } from "../../client/components/ui";
 import axios from 'axios';
-import { tColor } from "client/types/ui";
-import { Link } from "react-router-dom";
+import { UserData, tColor } from "client/types/ui";
 
 interface subscription {
   _id: string,
@@ -14,46 +13,38 @@ interface subscription {
   subscription_type: string, 
 }
 
-interface UserData {
-  data: {
-    createdAt: string
-    password: string
-    subscriptions: string[]
-    updatedAt: string
-    username: string
-    _id: string
-  }
-}
-
 interface Props {
   theme?: tColor
   userData: UserData;
-  setSubscriptionId: (id: string) => void;
+  setSubscriptionId?: (id: string) => void;
   screenwidth: number;
 }
 
 interface State {
   subscriptions: subscription[],
+  isLoading: boolean,
 }
 
 class Subscriptions extends React.PureComponent<Props> {
   readonly state: State = {
     subscriptions: [],
+    isLoading: true
   }
 
   componentDidUpdate(prevProps) {
     // update state when user data changes
     if (prevProps.userData !== this.props.userData) {
-      this.getSubscriptions()
+      console.log(this.props.userData)
+      this.getSubscriptions();
     }
   }
 
   componentDidMount() { 
-    this.getSubscriptions()
+    this.getSubscriptions();
   }
 
   componentWillUnmount() { 
-    this.setState({ subscription: [] })
+    this.setState({ subscription: [] });
   }
 
 
@@ -63,7 +54,6 @@ class Subscriptions extends React.PureComponent<Props> {
     // get user data after login passed from props
 
     const data = this.props.userData ? this.props.userData.data.subscriptions : [];
-
     if (data && data.length) {
       const querySubscription = async (subscription_id) => {
         const subscriptions = [];
@@ -80,7 +70,7 @@ class Subscriptions extends React.PureComponent<Props> {
             subscriptions.push(response.data.data);
           }
         })
-        .catch(err => { if (err.response.status === 404) {} })
+        .catch(err => { if (err.response.status === 404) { return } })
         return subscriptions
       }
 
@@ -89,12 +79,16 @@ class Subscriptions extends React.PureComponent<Props> {
         return querySubscription(id)
       })
 
-      // resolve above promise and create a list of subscription of user
+      // resolve above promise and create a list of subscriptions of user
       Promise.all(result).then(resolved =>  {
-        resolved.map((item) => {
-          combinedSubscriptions.push(item[0])
-        })
-        this.setState({ subscriptions : combinedSubscriptions})
+        setTimeout(() => {
+          this.setState({ isLoading: false });
+          resolved.map((item) => {
+            combinedSubscriptions.push(item[0])
+          })
+          this.setState({ subscriptions : combinedSubscriptions})
+        }, 1000)
+        
       })
     }
   }
@@ -109,16 +103,51 @@ class Subscriptions extends React.PureComponent<Props> {
         sBottom="40"
         alignItems="center"
       >
-
-        { !!this.state.subscriptions.length &&
-            <Layout sBottom="24">
-              <Text size="large" height="28">
-                
+        { this.props.userData && (
+          <React.Fragment>
+          <Layout align="flex-start" direction="row">
+            { (this.props.userData.data.firstname) && 
+              <Layout sRight="4">
+                <Text size="medium" height="28">
+                  { this.props.userData.data.firstname}
+                </Text>
+              </Layout>
+              }
+            { (this.props.userData.data.surname ) &&
+              ( <Text size="medium" height="28">
+                  { this.props.userData.data.surname }
+                </Text>
+              )
+            }
+          </Layout>
+          <Layout align="flex-start" direction="row">
+          { (this.props.userData.data.address) && 
+            <Layout sRight="4">
+              <Text size="medium" height="28">
+                { this.props.userData.data.address}
               </Text>
             </Layout>
-        }
+            }
+          { (this.props.userData.data.surname ) &&
+            ( <Text size="medium" height="28">
+                { this.props.userData.data.surname }
+              </Text>
+            )
+          }
+        </Layout>
+        <Layout align="flex-start" direction="row">
+          { (this.props.userData.data.phone) && 
+            <Layout sRight="4">
+              <Text size="medium" height="28">
+                { this.props.userData.data.phone}
+              </Text>
+            </Layout>
+            }
+        </Layout>
+        </React.Fragment>
+         )}
         <Layout direction="row" wrapped width="1290" alignContent="flex-start">
-        { this.state.subscriptions.length ? 
+        { (!!this.state.subscriptions.length && !this.state.isLoading) &&
             this.state.subscriptions.map(item => 
             (
               <Layout 
@@ -172,25 +201,32 @@ class Subscriptions extends React.PureComponent<Props> {
                         </Layout>
                       </Layout>
                     }
-                    <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" expand="1" border >
+                    {/* <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" expand="1" border >
                       <Layout sTop="8" sBottom="8" sLeft="8" sRight="8" alignItems="flex-end">
-                        {/* <Link to={{ pathname: "/details", state: { subscription_id: item._id }}}> */}
+                        <Link to={{ pathname: "/details", state: { subscription_id: item._id }}}>
                           <Button background={this.props.theme.primaryDefault}>
                             <Text color={this.props.theme.whiteColor} size="small" weight="600">
                               See More
                             </Text>
                           </Button>
-                        {/* </Link> */}
+                        </Link>
                       </Layout>
-                    </Layout>
+                    </Layout> */}
                   </Layout>
                 </Background>
               </Layout>
             )
-          ) :
-          <Layout sLeft="8">
-            <Text>No Subscription available for this account</Text>
-          </Layout>
+          )}
+          { (!this.state.isLoading && !this.state.subscriptions.length) && 
+            <Layout sLeft="8">
+              <Text>No Subscription available for this account</Text>
+            </Layout>
+          }
+          {
+            (this.state.isLoading && !this.state.subscriptions.length) && 
+            <svg className="spinner" viewBox="0 0 50 50">
+              <circle className="path" cx="25" cy="25" r="20" fill="none" strokeWidth="5"></circle>
+            </svg>
           }
         </Layout>
       </Layout>
