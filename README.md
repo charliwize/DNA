@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-This project holds both the client application and the server application with one node_modules folder handling but cases. First run `npm install` from the root. After this you will run `npm run start` from the root which will launch the project at `localhost:3001`. Run this command anytime you want to install all modules again. This is a script I have defined in package.json .
+This project holds both the client application and the server application with one node_modules folder handling but cases. First run `npm install` from the root. Run this command anytime you want to install all modules again. After this you will run `npm run start` from the root which will launch the project at `localhost:3001`. This is a script I have defined in package.json .
 
 I am hosting the MongoDB database at mLab (https://mlab.com/)
 ## File structure
