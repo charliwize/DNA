@@ -28,6 +28,7 @@ export interface tColor {
   veryDarkGray: string
   darkGray: string,
   primaryDefault: string,
+  secondaryDefault: string,
   verylightGray: string,
   whiteColor: string,
   error: string,

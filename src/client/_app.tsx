@@ -25,7 +25,8 @@ const theme: tColor = {
 	veryDarkGray: "#333333",
 	verylightGray: "#f8f8f8",
   whiteColor: "#ffffff",
-	primaryDefault: "#ff007c",
+  primaryDefault: "#ff007c",
+  secondaryDefault: "#067f92",
 	error: "#940718",
   success: "#025c1e",
   warning: "#d0860A",
@@ -49,17 +50,31 @@ const getCookie = (cookiename: string) => {
 const App = (props) => {
   const [data, setData]: any = useState();
   const [loggedIn, setLoggedIn]: any = useState<boolean>(undefined);
-  const [subscription_id, setSubscriptionId]: any = useState("")
+  const [width, setWidth]: any = useState(window.innerWidth);
   const value = getCookie("loggedIn");
   const username = getCookie("username");
 
   useEffect(() => {
+    const abortController = new AbortController();
     if (value === "true") {
       setLoggedIn(true)
       getData()
     }
+    return () => {
+      abortController.abort();
+    };
   }, [])
   usePrevious(data);
+
+
+  useEffect(() => {
+    window.addEventListener("resize", setSreensize);
+    return () => window.removeEventListener("resize", setSreensize)
+  })
+
+  const setSreensize = () => {
+    setWidth(window.innerWidth)
+  }
 
   function usePrevious(value) {
     const ref = useRef();
@@ -112,8 +127,15 @@ const App = (props) => {
           <Route path="/subscription" render={()=> (
             loggedIn ?
               <Fragment>
-                <Header theme={theme} isLoggedIn changeRoute={changeRoute} username={username}/>
-                <Subscriptions theme={theme} userData={data} setSubscriptionId= {setSubscriptionInfo}/>
+                <Header 
+                  theme={theme} 
+                  isLoggedIn 
+                  changeRoute={changeRoute} 
+                  username={username} screenwidth={width}/>
+                <Subscriptions 
+                  theme={theme} 
+                  userData={data} 
+                  setSubscriptionId = {setSubscriptionInfo} screenwidth={width} />
               </Fragment>
               :
               <Redirect to={{
@@ -133,11 +155,21 @@ const App = (props) => {
             }}/>
           )}>
           </Route>
+          <Route path="/" render={() => (
+            !loggedIn ? 
+              <Login theme={theme} changeRoute={changeRoute}/>
+            :
+            <Redirect to={{
+              pathname: '/subscription',
+              state: { from: props.location }
+            }}/>
+          )}>
+          </Route>
 
           <Route path="/details" render={()=> (
             loggedIn ?
               <Fragment>
-                <Header theme={theme} isLoggedIn changeRoute={changeRoute} username={username}/>
+                <Header theme={theme} isLoggedIn changeRoute={changeRoute} username={username} screenwidth={width}/>
                 <Details theme={theme} />
               </Fragment>
               :

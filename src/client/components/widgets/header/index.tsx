@@ -8,12 +8,14 @@ interface Props {
 	isLoggedIn: boolean,
 	changeRoute: (a: boolean) => void;
 	username: string;
+	screenwidth: number
 }
 
 const Header = (props: Props) => {
-  return (
+
+	return (
 		<Background color={props.theme.blackColor} src={header_bg} size="cover">
-			<Layout sLeft="48" sBottom="12">
+			<Layout sLeft={props.screenwidth > 375 ? "48" : "12" } sBottom="24">
 				<Layout height="70" direction="row">
 					<Layout width="70">
 						<Image src={dna_logo} />
@@ -23,7 +25,7 @@ const Header = (props: Props) => {
 							{ props.isLoggedIn &&
 							<Fragment>
 								{
-								props.username &&
+								(props.username && props.screenwidth >= 768) &&
 									<Fragment>
 									<Text color={props.theme.whiteColor} size="small">Welcome</Text>
 									<Layout sLeft="4" sRight="8">
@@ -45,11 +47,8 @@ const Header = (props: Props) => {
 				<Layout align="flex-start">
 					<Layout sTop="18">
 						<Layout noFlex>
-							<Text size="medium" color={props.theme.whiteColor}>
-								My Services
-							</Text>
 							<Text size="xx-large" color={props.theme.whiteColor} weight="600">
-								Subscriptions
+								My Subscriptions
 							</Text>
 						</Layout>
 					</Layout>

@@ -7,9 +7,8 @@ interface Props {
 
 class Details extends React.PureComponent<Props> {
 	render() {
-		console.log(this.props)
 		return (
-			<div>wsd</div>
+			<div>Subscription detail should be here</div>
 		)
 	}
 }

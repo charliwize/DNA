@@ -91,8 +91,8 @@ class Login extends React.PureComponent<Props, State> {
 
 	render() {
 		return (
-			<Layout fullHeight justify="center">
-				<Layout width="300" align="center">
+			<Layout fullHeight justify="center" alignItems="center">
+				<Layout width="300" alignContent="center">
 					<Layout height="24">
 						{ this.state.error && 
 							<Text color={this.props.theme.warning}>

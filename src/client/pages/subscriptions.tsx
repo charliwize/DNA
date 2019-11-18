@@ -29,6 +29,7 @@ interface Props {
   theme?: tColor
   userData: UserData;
   setSubscriptionId: (id: string) => void;
+  screenwidth: number;
 }
 
 interface State {
@@ -102,64 +103,88 @@ class Subscriptions extends React.PureComponent<Props> {
     return (
       <Layout
         direction="column" 
-        sLeft="40" 
-        sRight="40" 
+        sLeft={ this.props.screenwidth >= 768 ? "40" : this.props.screenwidth <= 375 ? "12" : "20" }
+        sRight={ this.props.screenwidth >= 768 ? "40" : this.props.screenwidth <= 375 ? "12" : "20" }
         sTop="40" 
         sBottom="40"
         alignItems="center"
       >
-        <Layout sBottom="24">
-          <Text size="large" height="28">
-            You  select calls and messages with unlimited access or at low cost depending on usage. 
-            The internet is always unlimited in the home country and includes an EU data plan and WiFi calls.
-          </Text>
-        </Layout>
+
+        { !!this.state.subscriptions.length &&
+            <Layout sBottom="24">
+              <Text size="large" height="28">
+                
+              </Text>
+            </Layout>
+        }
         <Layout direction="row" wrapped width="1290" alignContent="flex-start">
         { this.state.subscriptions.length ? 
             this.state.subscriptions.map(item => 
             (
               <Layout 
-              width="300" sLeft="20" sRight="20" sTop="20"  key={item._id} expand="1" align="flex-start">
-              <Background color={this.props.theme.verylightGray}>
-                <Layout 
-                  direction="column" 
-                  align="flex-start" 
-                  wrapped
-                  >
-                  <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" border expand="1">
-                    <Layout sTop="8" sBottom="8" sLeft="8" sRight="20">
-                      <Text weight="800" size="large">{ item.subscription_name }</Text>
+                width="300" 
+                sLeft={ this.props.screenwidth >= 768 ? "20" : "12" } 
+                sRight={ this.props.screenwidth >= 768 ? "20" : "12" } 
+                sTop="20"  key={item._id} expand="1" align="flex-start" 
+                >
+                <Background color={this.props.theme.verylightGray}>
+                  <Layout 
+                    direction="column" 
+                    align="flex-start" 
+                    wrapped
+                    borderWidth="4" 
+                    borderLeft 
+                    borderColor={item.subscription_type === "Phone Subscription" 
+                    ? this.props.theme.primaryDefault : this.props.theme.secondaryDefault}
+                    >
+                    { item.subscription_speed && 
+                    <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" border expand="1">
+                      <Layout sTop="4" sBottom="4" sLeft="8" sRight="20">
+                        <Text weight="800" size="large">{ item.subscription_name }</Text>
+                      </Layout>
+                    </Layout>
+                    }
+                    { item.subscription_speed &&
+                    <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" border>
+                      <Layout sTop="4" sBottom="4" sLeft="8" sRight="20" expand="1">
+                        <Text>{ item.subscription_speed }</Text>
+                      </Layout>
+                    </Layout>
+                    }
+                    { item.subscription_rate && 
+                      <Layout borderColor={this.props.theme.whiteColor} expand="1" borderWidth="2" border>
+                        <Layout sTop="4" sBottom="4" sLeft="8" sRight="20">
+                          <Text>{ item.subscription_rate }</Text>
+                        </Layout>
+                      </Layout>
+                    }
+                    { item.subscription_type && 
+                      <Layout borderColor={this.props.theme.whiteColor} expand="1" borderWidth="2" border>
+                        <Layout sTop="4" sBottom="4" sLeft="8" sRight="20">
+                          <Text>{ item.subscription_type }</Text>
+                        </Layout>
+                      </Layout>
+                    }
+                    { item.subscription_price && 
+                      <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" border expand="1">
+                        <Layout sTop="4" sBottom="4" sLeft="8" sRight="8">
+                          <Text size="x-large" weight="800">{ item.subscription_price }</Text>
+                        </Layout>
+                      </Layout>
+                    }
+                    <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" expand="1" border >
+                      <Layout sTop="8" sBottom="8" sLeft="8" sRight="8" alignItems="flex-end">
+                        {/* <Link to={{ pathname: "/details", state: { subscription_id: item._id }}}> */}
+                          <Button background={this.props.theme.primaryDefault}>
+                            <Text color={this.props.theme.whiteColor} size="small" weight="600">
+                              See More
+                            </Text>
+                          </Button>
+                        {/* </Link> */}
+                      </Layout>
                     </Layout>
                   </Layout>
-                  <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" border>
-                    <Layout sTop="8" sBottom="8" sLeft="8" sRight="20" expand="1">
-                      <Text>{ item.subscription_speed }</Text>
-                    </Layout>
-                  </Layout>
-                  <Layout borderColor={this.props.theme.whiteColor} expand="1" borderWidth="2" border>
-                    <Layout sTop="8" sBottom="8" sLeft="8" sRight="20">
-                      <Text>{ item.subscription_rate }</Text>
-                    </Layout>
-                  </Layout>
-                  <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" border expand="1">
-                    <Layout sTop="8" sBottom="8" sLeft="8" sRight="8">
-                      <Text size="x-large" weight="800">{ item.subscription_price}</Text>
-                      <Text>{ item.subscription_opening_fee}</Text>
-                    </Layout>
-                  </Layout>
-                  <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" expand="1" border >
-                    <Layout sTop="8" sBottom="8" sLeft="8" sRight="8" alignItems="flex-end">
-                      <Link to={{ pathname: "/details", state: { subscription_id: item._id }}}>
-                        <Button background={this.props.theme.primaryDefault}>
-                          <Text color={this.props.theme.whiteColor} size="small" weight="600">
-                            See More
-                          </Text>
-                        </Button>
-                      </Link>
-                    </Layout>
-                  </Layout>
-                </Layout>
-              </Background>
+                </Background>
               </Layout>
             )
           ) :
