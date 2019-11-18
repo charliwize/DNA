@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "outDir": "./src/client/dist/",
+    "target": "esnext",
+    "module": "esnext",
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "lib": ["dom", "es2015", "es2016", "es2017"],
+    "baseUrl": "src",
+  },
+
+  "typedocOptions": {
+    "mode": "modules",
+    "paths": {
+      "~/*": ["./*"],
+    }
+  }
+}
