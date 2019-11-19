@@ -34,7 +34,6 @@ class Subscriptions extends React.PureComponent<Props> {
   componentDidUpdate(prevProps) {
     // update state when user data changes
     if (prevProps.userData !== this.props.userData) {
-      console.log(this.props.userData)
       this.getSubscriptions();
     }
   }
@@ -104,47 +103,41 @@ class Subscriptions extends React.PureComponent<Props> {
         fullHeight
         alignItems="center"
       >
-        { this.props.userData && (
+        { (this.props.userData && !this.state.isLoading) && (
           <React.Fragment>
-          <Layout align="flex-start" direction="row">
-            { (this.props.userData.data.firstname) && 
+            <Layout align="flex-start" direction="row">
+              { (this.props.userData.data.firstname) && 
+                <Layout sRight="4">
+                  <Text size="medium" height="28">
+                    { this.props.userData.data.firstname}
+                  </Text>
+                </Layout>
+                }
+              { (this.props.userData.data.surname ) &&
+                ( <Text size="medium" height="28">
+                    { this.props.userData.data.surname }
+                  </Text>
+                )
+              }
+            </Layout>
+            <Layout align="flex-start" direction="row">
+            { (this.props.userData.data.address) && 
               <Layout sRight="4">
                 <Text size="medium" height="28">
-                  { this.props.userData.data.firstname}
+                  { this.props.userData.data.address}
                 </Text>
               </Layout>
               }
-            { (this.props.userData.data.surname ) &&
-              ( <Text size="medium" height="28">
-                  { this.props.userData.data.surname }
-                </Text>
-              )
-            }
           </Layout>
           <Layout align="flex-start" direction="row">
-          { (this.props.userData.data.address) && 
-            <Layout sRight="4">
-              <Text size="medium" height="28">
-                { this.props.userData.data.address}
-              </Text>
-            </Layout>
-            }
-          { (this.props.userData.data.surname ) &&
-            ( <Text size="medium" height="28">
-                { this.props.userData.data.surname }
-              </Text>
-            )
-          }
-        </Layout>
-        <Layout align="flex-start" direction="row">
-          { (this.props.userData.data.phone) && 
-            <Layout sRight="4">
-              <Text size="medium" height="28">
-                { this.props.userData.data.phone}
-              </Text>
-            </Layout>
-            }
-        </Layout>
+            { (this.props.userData.data.phone) && 
+              <Layout sRight="4">
+                <Text size="medium" height="28">
+                  { this.props.userData.data.phone}
+                </Text>
+              </Layout>
+              }
+          </Layout>
         </React.Fragment>
          )}
         <Layout direction="row" wrapped width="1290" alignContent="flex-start">

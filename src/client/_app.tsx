@@ -3,12 +3,11 @@ import  React, { useState, useEffect, useRef, Fragment } from 'react';
 import * as ReactDOM from "react-dom";
 import { Header } from "../client/components/widgets"
 import './style.scss';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route, Link, Redirect, useHistory } from "react-router-dom";
 import { Subscriptions, Login, Details } from "../client/pages";
 import * as styledComponents from 'styled-components';
 import axios from 'axios';
 
-import { ThemedStyledComponentsModule } from 'styled-components';
 import { tColor } from "client/types/ui"
 
 // setConfig({
@@ -53,11 +52,13 @@ const App = (props) => {
   const [width, setWidth]: any = useState(window.innerWidth);
   const value = getCookie("loggedIn");
   const username = getCookie("username");
-
   useEffect(() => {
+
     const abortController = new AbortController();
     if (value === "true") {
       setLoggedIn(true)
+      console.log(loggedIn)
+
       getData()
     }
     // clean subscription after this effecr
@@ -70,6 +71,7 @@ const App = (props) => {
 
   // listen for window resizing and set screen width accordingling
   useEffect(() => {
+    console.log(loggedIn)
     if (!data && loggedIn) {
       getData()
     }
@@ -109,15 +111,11 @@ const App = (props) => {
     
   // }
 
-  function changeRoute(status?: boolean) { 
+  function changeRoute(status?: boolean) {
+    setLoggedIn(status) 
     if (!status) {
       document.cookie = "loggedIn=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      setLoggedIn(false) 
-    }
-
-    if (value === "true" || status) { 
-      setLoggedIn(true) 
     }
   }
 
@@ -156,49 +154,28 @@ const App = (props) => {
                   userData={data} 
                   screenwidth={width} />
               </Fragment>
-              :
-              <Redirect to={{
-                pathname: '/login',
-                state: { from: props.location }
-              }}/>
-          )}>
-            
+              : <Redirect to={{
+                  pathname: '/login',
+                  state: { from: props.location }
+                }}/>
+            )}>
           </Route>
           <Route path="/login" render={() => (
             !loggedIn ? 
-              <Login theme={theme} changeRoute={changeRoute}/>
-            :
-            <Redirect to={{
-              pathname: '/subscription',
-              state: { from: props.location }
-            }}/>
-          )}>
-          </Route>
-          <Route path="/" render={() => (
-            !loggedIn ? 
-              <Login theme={theme} changeRoute={changeRoute}/>
-            :
-            <Redirect to={{
-              pathname: '/subscription',
-              state: { from: props.location }
-            }}/>
-          )}>
-          </Route>
-
-          <Route path="/details" render={()=> (
-            loggedIn ?
-              <Fragment>
-                <Header theme={theme} isLoggedIn changeRoute={changeRoute} username={username} screenwidth={width}/>
-                <Details theme={theme} />
-              </Fragment>
-              :
-              <Redirect to={{
-                pathname: '/login',
+              <Login theme={theme} changeRoute={changeRoute} loggedIn={loggedIn}/>
+            : <Redirect to={{
+                pathname: '/subscription',
                 state: { from: props.location }
               }}/>
             )}>
-            
           </Route>
+          <Route path="/" render={() => (
+            <Redirect to={{
+              pathname: '/subscription',
+              state: { from: props.location }
+            }}/>
+          )}>
+          </Route>            
         </Switch>
       </ThemeProvider>
     </Router>

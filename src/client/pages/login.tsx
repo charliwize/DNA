@@ -6,7 +6,8 @@ import axios from 'axios';
 
 interface Props {
 	theme: tColor,
-	changeRoute?: (value: boolean) => void
+	changeRoute?: (value: boolean) => void,
+	loggedIn?: boolean
 }
 
 interface State {
@@ -70,7 +71,6 @@ class Login extends React.PureComponent<Props, State> {
 			this.handleError("Enter a valid email")
 			return;
 		}
-
 		this.loginUser();
 	}
 
@@ -88,6 +88,7 @@ class Login extends React.PureComponent<Props, State> {
 
 	render() {
 		return (
+			!this.props.loggedIn && (
 			<Layout justify="center" alignItems="stretch" direction="row" sTop="36">
 				<Layout alignContent="center"  width="300">
 					<Layout height="24">
@@ -119,7 +120,7 @@ class Login extends React.PureComponent<Props, State> {
 					</Layout>
 					<Button background={this.props.theme.primaryDefault} onClick={this.handleSubmit}>Login</Button>
 				</Layout>
-			</Layout>
+			</Layout>)
 		)
 	}
 }
