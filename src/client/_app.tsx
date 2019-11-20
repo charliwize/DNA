@@ -57,8 +57,6 @@ const App = (props) => {
     const abortController = new AbortController();
     if (value === "true") {
       setLoggedIn(true)
-      console.log(loggedIn)
-
       getData()
     }
     // clean subscription after this effecr
@@ -71,7 +69,6 @@ const App = (props) => {
 
   // listen for window resizing and set screen width accordingling
   useEffect(() => {
-    console.log(loggedIn)
     if (!data && loggedIn) {
       getData()
     }

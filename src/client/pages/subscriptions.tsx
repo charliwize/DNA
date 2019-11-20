@@ -7,6 +7,7 @@ interface subscription {
   _id: string,
   subscription_name: string,
   subscription_price: string,
+  formattedName: string,
   subscription_speed: string,
   subscription_rate: string,
   subscription_opening_fee: string,
@@ -93,6 +94,7 @@ class Subscriptions extends React.PureComponent<Props> {
   }
 
   render() {
+    console.log(this.state.subscriptions)
     return (
       <Layout
         direction="column" 
@@ -160,14 +162,21 @@ class Subscriptions extends React.PureComponent<Props> {
                     borderColor={item.subscription_type === "Phone Subscription" 
                     ? this.props.theme.primaryDefault : this.props.theme.secondaryDefault}
                     >
-                    { item.subscription_speed && 
+                    { item.subscription_name && 
                     <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" border expand="1">
                       <Layout sTop="4" sBottom="4" sLeft="8" sRight="20">
                         <Text weight="800" size="large">{ item.subscription_name }</Text>
                       </Layout>
                     </Layout>
                     }
-                    { item.subscription_speed &&
+                    { item.formattedName && 
+                    <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" border expand="1">
+                      <Layout sTop="4" sBottom="4" sLeft="8" sRight="20">
+                        <Text weight="800" size="large">{ item.formattedName }</Text>
+                      </Layout>
+                    </Layout>
+                    }
+                    {/* { item.subscription_speed &&
                     <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" border>
                       <Layout sTop="4" sBottom="4" sLeft="8" sRight="20" expand="1">
                         <Text>{ item.subscription_speed }</Text>
@@ -194,7 +203,7 @@ class Subscriptions extends React.PureComponent<Props> {
                           <Text size="x-large" weight="800">{ item.subscription_price }</Text>
                         </Layout>
                       </Layout>
-                    }
+                    } */}
                     {/* <Layout borderColor={this.props.theme.whiteColor} borderWidth="2" expand="1" border >
                       <Layout sTop="8" sBottom="8" sLeft="8" sRight="8" alignItems="flex-end">
                         <Link to={{ pathname: "/details", state: { subscription_id: item._id }}}>
